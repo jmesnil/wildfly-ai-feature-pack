@@ -7,10 +7,10 @@
         <version>0.11.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>wildfly-ai-feature-pack</artifactId>
+    <artifactId>wildfly-mcp-feature-pack</artifactId>
     <packaging>pom</packaging>
 
-    <name>WildFly AI Feature pack</name>
+    <name>WildFly MCP Feature pack</name>
 
     <description>Feature pack to provide AI integration for WildFly</description>
 

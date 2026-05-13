@@ -4,7 +4,7 @@
         <default-configs inherit="false"/>
         <packages inherit="false"/>
     </feature-pack>
-    <feature-pack location="org.wildfly.generative-ai:wildfly-ai-feature-pack:${project.version}">
+    <feature-pack location="org.wildfly.generative-ai:wildfly-mcp-feature-pack:${project.version}">
         <default-configs inherit="false"/>
         <packages inherit="false"/>
     </feature-pack>
