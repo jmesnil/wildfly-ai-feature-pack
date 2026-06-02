@@ -19,25 +19,26 @@ import jakarta.json.JsonObjectBuilder;
  * @param required     whether the field is required
  * @param defaultValue optional default value
  */
-public record StringSchema(
+public record StringProperty(
+        String name,
         String title,
         String description,
         Integer minLength,
         Integer maxLength,
         String format,
         boolean required,
-        String defaultValue) implements PrimitiveSchema {
+        String defaultValue) implements ElicitationProperty<String> {
 
-    public StringSchema() {
-        this(null, null, null, null, null, false, null);
+    public StringProperty(String name) {
+        this(name, null, null, null, null, null, true, null);
     }
 
-    public StringSchema(boolean required) {
-        this(null, null, null, null, null, required, null);
+    public StringProperty(String name, boolean required, String defaultValue) {
+        this(name, null, null, null, null, null, required, defaultValue);
     }
 
-    public StringSchema(boolean required, String title, String description) {
-        this(title, description, null, null, null, required, null);
+    public StringProperty(String name, boolean required, String title, String description) {
+        this(name, title, description, null, null, null, required, null);
     }
 
     @Override

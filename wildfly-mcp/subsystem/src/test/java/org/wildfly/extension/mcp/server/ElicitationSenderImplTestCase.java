@@ -20,9 +20,9 @@ import org.junit.Test;
 import org.wildfly.extension.mcp.api.ClientCapability;
 import org.wildfly.extension.mcp.api.Implementation;
 import org.wildfly.extension.mcp.api.InitializeRequest;
-import org.wildfly.extension.mcp.injection.elicitation.BooleanSchema;
+import org.wildfly.extension.mcp.injection.elicitation.BooleanProperty;
 import org.wildfly.extension.mcp.injection.elicitation.Elicitation;
-import org.wildfly.extension.mcp.injection.elicitation.StringSchema;
+import org.wildfly.extension.mcp.injection.elicitation.StringProperty;
 
 public class ElicitationSenderImplTestCase {
 
@@ -72,8 +72,8 @@ public class ElicitationSenderImplTestCase {
         ElicitationSenderImpl sender = new ElicitationSenderImpl(
                 new PendingRequestRegistry(), new TestResponder(), req);
 
-        Elicitation elicitation = Elicitation.builder("Provide info")
-                .addSchemaProperty("name", new StringSchema(true))
+        Elicitation elicitation = Elicitation.formBuilder("Provide info",
+                    new StringProperty("name"))
                 .build();
 
         try {
@@ -95,9 +95,9 @@ public class ElicitationSenderImplTestCase {
 
         ElicitationSenderImpl sender = new ElicitationSenderImpl(registry, responder, req);
 
-        Elicitation elicitation = Elicitation.builder("What is your username?")
-                .addSchemaProperty("username", new StringSchema(true))
-                .addSchemaProperty("notify", new BooleanSchema(false))
+        Elicitation elicitation = Elicitation.formBuilder("What is your username?",
+                new StringProperty("username"),
+                new BooleanProperty("notify",false, Boolean.TRUE))
                 .timeout(5_000)
                 .build();
 
@@ -139,8 +139,8 @@ public class ElicitationSenderImplTestCase {
         Elicitation.Response response = responseFuture.get(2, TimeUnit.SECONDS);
         assertNotNull(response);
         assertTrue(response.isAccepted());
-        assertEquals("alice", response.getString("username"));
-        assertTrue(response.getBoolean("notify"));
+        assertEquals("alice", response.getString("username").orElse(null));
+        assertTrue(response.getBoolean("notify").orElse(false));
     }
 
     @Test
@@ -151,8 +151,8 @@ public class ElicitationSenderImplTestCase {
                 List.of(new ClientCapability("elicitation", java.util.Map.of())));
         ElicitationSenderImpl sender = new ElicitationSenderImpl(registry, responder, req);
 
-        Elicitation elicitation = Elicitation.builder("Confirm?")
-                .addSchemaProperty("field", new StringSchema(true))
+        Elicitation elicitation = Elicitation.formBuilder("Confirm?",
+                    new StringProperty("field"))
                 .timeout(5_000)
                 .build();
 
@@ -191,8 +191,8 @@ public class ElicitationSenderImplTestCase {
                 List.of(new ClientCapability("elicitation", java.util.Map.of())));
         ElicitationSenderImpl sender = new ElicitationSenderImpl(registry, responder, req);
 
-        Elicitation elicitation = Elicitation.builder("Quick timeout test")
-                .addSchemaProperty("field", new StringSchema(false))
+        Elicitation elicitation = Elicitation.formBuilder("Quick timeout test",
+                    new StringProperty("field"))
                 .timeout(100) // 100 ms timeout
                 .build();
 
@@ -419,8 +419,8 @@ public class ElicitationSenderImplTestCase {
 
         ElicitationSenderImpl sender = new ElicitationSenderImpl(registry, responder, req);
 
-        Elicitation elicitation = Elicitation.builder("Name?")
-                .addSchemaProperty("name", new StringSchema(true))
+        Elicitation elicitation = Elicitation.formBuilder("Name?",
+                    new StringProperty("name"))
                 .timeout(5_000)
                 .build();
 

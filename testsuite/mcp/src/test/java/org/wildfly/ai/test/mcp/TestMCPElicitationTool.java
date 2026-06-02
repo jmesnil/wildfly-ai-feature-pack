@@ -11,9 +11,11 @@ import java.util.concurrent.TimeUnit;
 
 import org.mcp_java.server.tools.Tool;
 import org.mcp_java.server.tools.ToolArg;
+import org.wildfly.extension.mcp.injection.elicitation.BooleanProperty;
 import org.wildfly.extension.mcp.injection.elicitation.Elicitation;
+import org.wildfly.extension.mcp.injection.elicitation.ElicitationProperty;
 import org.wildfly.extension.mcp.injection.elicitation.ElicitationSender;
-import org.wildfly.extension.mcp.injection.elicitation.StringSchema;
+import org.wildfly.extension.mcp.injection.elicitation.StringProperty;
 
 public class TestMCPElicitationTool {
 
@@ -37,13 +39,13 @@ public class TestMCPElicitationTool {
         if (!elicitationSender.isFormSupported()) {
             return "Elicitation Form Mode not supported by client";
         }
-        Elicitation elicitation = Elicitation.builder("What is your name?")
-                .addSchemaProperty("name", new StringSchema(true, "Your Name", "Enter your first name"))
+        Elicitation elicitation = Elicitation.formBuilder("What is your name?",
+                    new StringProperty("name", true, "Your Name", "Enter your first name"))
                 .timeout(30_000)
                 .build();
         Elicitation.Response response = elicitationSender.send(elicitation);
         return switch (response.action()) {
-            case ACCEPT -> "Hello, " + response.getString("name") + "!";
+            case ACCEPT -> "Hello, " + response.getString("name").orElse("stranger") + "!";
             case CANCEL -> "Request was cancelled.";
             case DECLINE -> "You declined to provide your name.";
         };
@@ -57,12 +59,13 @@ public class TestMCPElicitationTool {
         if (!elicitationSender.isFormSupported()) {
             return String.valueOf(a + b);
         }
-        Elicitation elicitation = Elicitation.builder("Confirm: add " + a + " + " + b + "?")
-                .addSchemaProperty("confirm", new org.wildfly.extension.mcp.injection.elicitation.BooleanSchema(true))
+        BooleanProperty confirm = new BooleanProperty("confirm", false, Boolean.FALSE);
+        Elicitation elicitation = Elicitation.formBuilder("Confirm: add " + a + " + " + b + "?",
+                    confirm)
                 .timeout(30_000)
                 .build();
         Elicitation.Response response = elicitationSender.send(elicitation);
-        if (response.isAccepted() && Boolean.TRUE.equals(response.getBoolean("confirm"))) {
+        if (response.isAccepted() && response.getBoolean(confirm).orElse(confirm.defaultValue())) {
             return "Result: " + (a + b);
         }
         return "Operation not confirmed.";
