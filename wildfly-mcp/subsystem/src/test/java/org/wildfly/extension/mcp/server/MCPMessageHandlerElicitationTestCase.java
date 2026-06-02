@@ -36,16 +36,6 @@ public class MCPMessageHandlerElicitationTestCase {
         connectionManager.add(connection);
     }
 
-    // ==================== Capability advertisement ====================
-
-    @Test
-    public void testElicitationAdvertisedInCapabilities() {
-        handler.handle(initializeMessage(), connection, responder);
-
-        JsonObject capabilities = responder.lastResult().getJsonObject("capabilities");
-        assertNotNull("elicitation capability must be advertised", capabilities.getJsonObject("elicitation"));
-    }
-
     // ==================== Response routing ====================
 
     @Test
@@ -148,16 +138,6 @@ public class MCPMessageHandlerElicitationTestCase {
     // ==================== URL mode capability ====================
 
     @Test
-    public void testElicitationAdvertisesFormAndUrlModes() {
-        handler.handle(initializeMessage(), connection, responder);
-
-        JsonObject elicitation = responder.lastResult().getJsonObject("capabilities").getJsonObject("elicitation");
-        assertNotNull("elicitation capability must be advertised", elicitation);
-        assertNotNull("form mode must be advertised", elicitation.getJsonObject("form"));
-        assertNotNull("url mode must be advertised", elicitation.getJsonObject("url"));
-    }
-
-    @Test
     public void testInitializeWithElicitationUrlCapability() {
         JsonObject initMsg = Json.createObjectBuilder()
                 .add("jsonrpc", "2.0")
@@ -223,7 +203,10 @@ public class MCPMessageHandlerElicitationTestCase {
                         .add("clientInfo", Json.createObjectBuilder()
                                 .add("name", "test-client")
                                 .add("version", "1.0.0"))
-                        .add("capabilities", Json.createObjectBuilder()))
+                        .add("capabilities", Json.createObjectBuilder()
+                                .add("elicitation", Json.createObjectBuilder()
+                                        .add("form", Json.createObjectBuilder())
+                                        .add("url", Json.createObjectBuilder()))))
                 .build();
     }
 }

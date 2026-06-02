@@ -97,7 +97,6 @@ public interface MCPLogger extends BasicLogger {
     @Message(id = 19, value = "Error invoking completion %s")
     void errorInvokingCompletion(@Cause Throwable cause, String name);
 
-    @LogMessage(level = ERROR)
     @Message(id = 20, value = "Client does not support %s mode elicitation")
     IllegalStateException elicitationModeNotSupported(Elicitation.Mode mode);
 }
