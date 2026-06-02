@@ -19,6 +19,7 @@ import org.jboss.logging.annotations.Cause;
 import org.jboss.logging.annotations.LogMessage;
 import org.jboss.logging.annotations.Message;
 import org.jboss.logging.annotations.MessageLogger;
+import org.wildfly.extension.mcp.injection.elicitation.Elicitation;
 
 @MessageLogger(projectCode = "WFMCP", length = 5)
 public interface MCPLogger extends BasicLogger {
@@ -95,4 +96,8 @@ public interface MCPLogger extends BasicLogger {
     @LogMessage(level = ERROR)
     @Message(id = 19, value = "Error invoking completion %s")
     void errorInvokingCompletion(@Cause Throwable cause, String name);
+
+    @LogMessage(level = ERROR)
+    @Message(id = 20, value = "Client does not support %s mode elicitation")
+    IllegalStateException elicitationModeNotSupported(Elicitation.Mode mode);
 }
