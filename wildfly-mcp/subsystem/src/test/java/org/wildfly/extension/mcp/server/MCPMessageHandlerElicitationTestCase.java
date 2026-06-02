@@ -142,7 +142,7 @@ public class MCPMessageHandlerElicitationTestCase {
 
         assertTrue(responder.hasResult());
         // Connection should now know client supports elicitation
-        assertTrue(connection.initializeRequest().supportsElicitation());
+        assertTrue(connection.initializeRequest().supportsElicitationForm());
     }
 
     // ==================== URL mode capability ====================
@@ -177,7 +177,7 @@ public class MCPMessageHandlerElicitationTestCase {
         handler.handle(initMsg, connection, responder);
 
         assertTrue(responder.hasResult());
-        assertTrue(connection.initializeRequest().supportsElicitation());
+        assertTrue(connection.initializeRequest().supportsElicitationForm());
         assertTrue(connection.initializeRequest().supportsElicitationUrl());
     }
 
@@ -199,7 +199,7 @@ public class MCPMessageHandlerElicitationTestCase {
         handler.handle(initMsg, connection, responder);
 
         assertTrue(responder.hasResult());
-        assertTrue(connection.initializeRequest().supportsElicitation());
+        assertTrue(connection.initializeRequest().supportsElicitationForm());
         assertFalse(connection.initializeRequest().supportsElicitationUrl());
     }
 
